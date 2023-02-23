@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from
 import React, {useRef, useState} from 'react';
 import Menu from '../components/Menu';
 import { LinearGradient } from 'expo-linear-gradient';
+import ProfilePicture from 'react-native-profile-picture';
 
 
 const Profile = () => {
@@ -42,14 +43,29 @@ const Profile = () => {
 
         <View style={styles.userCont}>
 
-          <ImageBackground style={styles.iconPhoto} source={require('../assets/iconsProfile/user.png')}>
-            <TouchableOpacity style={styles.addFotoBtn}>
-              <Text style={{color:'#FFF'}}>Edit</Text>
-            </TouchableOpacity>
-          </ImageBackground>
+          <ProfilePicture
+            isPicture = {true}
+            requirePicture={require('../assets/iconsProfile/profile-foto.jpg')}
+            width={100}
+            height={100}
+          />
 
           <Text style={{color:'#FFF', fontSize:20, fontWeight:'bold'}}>{name}</Text>
           <Text style={{color:'#FFF', fontSize:14}}>deleucostel32@gmail.com</Text>
+        </View>
+
+        <View style={styles.btnCont}>
+          <View style={styles.changeBtnCont}>
+            <TouchableOpacity style={styles.changeBtn}>
+              <Text style={{color:'#FFF', fontSize: 15}}>Change E-mail</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.changeBtn}>
+              <Text style={{color:'#FFF', fontSize: 15}}>Change Password</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.deletBtn}>
+            <Text style={{color:'#FFF', fontSize: 15}}>Delete account</Text>
+          </TouchableOpacity>
         </View>
     </LinearGradient>
   )
@@ -70,7 +86,7 @@ const styles = StyleSheet.create({
   },
   body: {
     flex:1,
-    padding: 10
+    padding: 10,
   },
   sideMenu: {
     position: 'absolute',
@@ -97,5 +113,35 @@ const styles = StyleSheet.create({
   },
   addFotoBtn: {
     backgroundColor: 'red'
+  },
+  btnCont: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'flex-end',
+    paddingBottom: 50
+  },
+  changeBtnCont: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 20
+  },
+  changeBtn: {
+    width: 150,
+    height: 30,
+    backgroundColor: '#39B8FE',
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  deletBtn: {
+    backgroundColor: '#FC0005',
+    width: 150,
+    height: 30,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    margin: 10
   }
 })

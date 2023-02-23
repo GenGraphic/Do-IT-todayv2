@@ -59,40 +59,43 @@ export const Menu = React.forwardRef((props, ref) => {
       style={[styles.body, { transform: [{ translateX: position }] }]} 
       pointerEvents={isVisible ? 'auto' : 'none'}>
         <BlurView blurRadius={40}>
-          <LinearGradient style={styles.menuWrapper} blurRadius={40} colors={['rgba(16, 0, 43, 0.7)', 'rgba(60,9,108,0.7), rgba(90,24,154,0.7),rgba(123,44,191,0.7)']}>
-              <View style={styles.topBar}>
-                  <Text style={styles.sayHi}>Hi, {userName}</Text>
-                  <TouchableOpacity onPress={slideToLeft}>
-                      <Image source={require('../assets/iconsHome/close.png')} style={styles.icon}/>
-                  </TouchableOpacity>
-              </View>
+            <LinearGradient style={styles.menuWrapper} blurRadius={40} colors={['rgba(16, 0, 43, 0.7)', 'rgba(60,9,108,0.7), rgba(90,24,154,0.7),rgba(123,44,191,0.7)']}>
+                <View style={styles.topBar}>
+                    <Text style={styles.sayHi}>Hi, {userName}</Text>
+                    <TouchableOpacity onPress={slideToLeft}>
+                        <Image source={require('../assets/iconsHome/close.png')} style={styles.icon}/>
+                    </TouchableOpacity>
+                </View>
 
-              <View style={styles.optionsList}>
-                  <TouchableOpacity 
-                  style={styles.menuOption} 
-                  onPress={() => navigation.replace('Notes')}>
-                      <Image source={require('../assets/iconsHome/sticky-notes.png')} style={styles.icon}/>
-                      <Text style={styles.whiteTxtMenu}>Notes</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                  onPress={() => navigation.replace('Profile')}
-                  style={styles.menuOption}>
-                      <Image source={require('../assets/iconsHome/user.png')} style={styles.icon}/>
-                      <Text style={styles.whiteTxtMenu}>My Profile</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                  onPress={() => navigation.replace('Calendar')} 
-                  style={styles.menuOption}>
-                      <Image source={require('../assets/iconsHome/calendar-menu.png')} style={styles.icon}/>
-                      <Text style={styles.whiteTxtMenu}>Calendar</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                  onPress={() => navigation.replace('Home')}
-                  style={styles.menuOption}>
-                      <Image source={require('../assets/iconsHome/save.png')} style={styles.icon}/>
-                      <Text style={styles.whiteTxtMenu}>Home</Text>
-                  </TouchableOpacity>
-              </View>
+                <View style={styles.optionsList}>
+                    <TouchableOpacity 
+                    onPress={() => navigation.replace('Home')}
+                    style={styles.menuOption}>
+                        <Image source={require('../assets/iconsHome/home.png')} style={styles.icon}/>
+                        <Text style={styles.whiteTxtMenu}>Home</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                    style={styles.menuOption} 
+                    onPress={() => navigation.replace('Notes')}>
+                        <Image source={require('../assets/iconsHome/sticky-notes.png')} style={styles.icon}/>
+                        <Text style={styles.whiteTxtMenu}>Notes</Text>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity
+                    onPress={() => navigation.replace('Calendar')} 
+                    style={styles.menuOption}>
+                        <Image source={require('../assets/iconsHome/calendar-menu.png')} style={styles.icon}/>
+                        <Text style={styles.whiteTxtMenu}>Calendar</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity 
+                    onPress={() => navigation.replace('Profile')}
+                    style={styles.menuOption}>
+                        <Image source={require('../assets/iconsHome/user.png')} style={styles.icon}/>
+                        <Text style={styles.whiteTxtMenu}>My Profile</Text>
+                    </TouchableOpacity>
+                </View>
 
                 <View>
                     <TouchableOpacity>
