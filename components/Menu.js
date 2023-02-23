@@ -4,7 +4,6 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { useNavigation } from '@react-navigation/core';
 import { authentication } from '../firebase';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
@@ -88,10 +87,10 @@ export const Menu = React.forwardRef((props, ref) => {
                       <Text style={styles.whiteTxtMenu}>Calendar</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
-                  onPress={() => navigation.replace('SavedTasks')}
+                  onPress={() => navigation.replace('Home')}
                   style={styles.menuOption}>
                       <Image source={require('../assets/iconsHome/save.png')} style={styles.icon}/>
-                      <Text style={styles.whiteTxtMenu}>Saved tasks</Text>
+                      <Text style={styles.whiteTxtMenu}>Home</Text>
                   </TouchableOpacity>
               </View>
 

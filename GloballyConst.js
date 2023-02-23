@@ -3,5 +3,5 @@ module.exports = {
 
     //this is the list of task and get items from addTaskScreen
     tasks: {
-    }
+    },
 };

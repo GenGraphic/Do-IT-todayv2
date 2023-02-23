@@ -2,7 +2,6 @@ import React, { Component, useState } from 'react'
 import { Text, View, StyleSheet, Image, TouchableOpacity, Platform, TextInput, Button, ScrollView,Keyboard } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import GloballyConst from '../GloballyConst';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 export function AddTask () {

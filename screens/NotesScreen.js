@@ -1,27 +1,26 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
-import React, { useRef, useState } from 'react';
+import React, { useRef, useContext } from 'react';
 import Menu from '../components/Menu';
-import Note from '../components/Note';
 import { LinearGradient } from 'expo-linear-gradient';
-import { FlatList } from 'react-native-gesture-handler';
+import NotesContext from '../NotesContext';
+import Note from '../components/Note';
 
 
 const NotesScreen = () => {
   const sideMenu = useRef(null);//ref to the menu forwordRef()
-  const [DATA, setDATA] = useState([
-    {
-      id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-      title: 'First Item',
-    },
-    
-  ]);
-
-  const Item = Note;
+  const { notes } = useContext(NotesContext);
+  const { addNewNote } = useContext(NotesContext);
+ 
   
-
   //get the function from the Menu Component and close it
   const openMenu = () => {
     sideMenu.current.slideToRight();
+  }
+
+  //function that makes a new random key, and use a function from NotesContext and adds it to the list
+  const handleAddNote =() => {
+    const key = Math.random() * 100;
+    addNewNote(key, '', '');
   }
   return (
     <LinearGradient 
@@ -47,16 +46,19 @@ const NotesScreen = () => {
         <Text style={{color:'#FFF', fontSize: 16}}>Hi, Eduard</Text>
         <Text style={{color:'#FFF', fontSize: 18, fontWeight:'bold'}}>Take notes.</Text>
       </View>
-      <View style={styles.notesList}>
-        <FlatList
-        data={DATA}
-        renderItem={({item}) => <Item title={item.title} />}
-        >
-          
-        </FlatList>
-      </View>
+      <ScrollView contentContainerStyle={styles.notesList}>
+        {notes.map((item) => {
+          return (
+            <Note key={item.key} id={item.key} title={item.title} text={item.text}></Note>//in  this case i use 'id' instead of key, so i dont't get an error since key and ref are default props in React native
+            //i had a problem here: when i would delete a note, i would delete the wrong one, and i was because:
+            //the Note element had no props for title and text, and it would not update the text in the fields
+          )
+        })
+        }
+      </ScrollView>
+
       <View style={{position: 'absolute', bottom: 25, left: 0, right: 0, justifyContent: 'center', alignItems: 'center'}}>
-        <TouchableOpacity style={styles.addBtn}>
+        <TouchableOpacity style={styles.addBtn} onPress={handleAddNote}>
           <Image 
             style={styles.plusIcon}
             source={require('../assets/iconsHome/plus.png')}
@@ -86,11 +88,7 @@ const styles = StyleSheet.create({
     paddingTop: 40
   },
   notesList: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    marginBottom: 100
-
+    paddingBottom: 100
   },
   addBtn: {
     width: 70,
