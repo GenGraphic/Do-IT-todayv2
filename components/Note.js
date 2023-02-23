@@ -38,7 +38,7 @@ const Note = ({id, title, text}) => {
     editNote(id, newTitle, newText)
   }
   return (
-    <TouchableOpacity style={[styles.body, {height: height}]} onPress={toggleNote}>
+    <View style={[styles.body, {height: height}]}>
       <View style={styles.nameCont}>
         <TextInput 
         multiline={true}
@@ -47,9 +47,13 @@ const Note = ({id, title, text}) => {
         onChangeText={(valueTitle) => setNewTitle(valueTitle)}>
           <Text>{title}</Text>
         </TextInput>
+        <TouchableOpacity onPress={toggleNote}>
+          <Image source={require('../assets/iconsNotes/resize-expand.png')} style={styles.iconSmall}/>
+        </TouchableOpacity>
       </View>
       <View style={styles.textCont}>
         <TextInput 
+        style={{width: '100%', height: '100%'}}
         multiline={true}
         editable={isToggled}
         placeholder={'Your notes goes here...'} 
@@ -63,7 +67,7 @@ const Note = ({id, title, text}) => {
         source={require('../assets/iconsNotes/delete.png')}
         />
       </TouchableOpacity>
-    </TouchableOpacity>
+    </View>
   )
 }
 
@@ -81,19 +85,23 @@ icon: {
     width: 22,
     height: 22
 },
+iconSmall: {
+  width: 15,
+  height: 15
+},
 nameCont: {
     backgroundColor: '#D9D9D9',
     height: '100%',
     width: '20%',
-    justifyContent:'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     borderBottomLeftRadius: 10,
-    borderTopLeftRadius: 10
+    borderTopLeftRadius: 10,
+    padding: 5
 },
 textCont: {
     width: '70%',
     height: '100%',
-    overflow: 'scroll',
     padding: 5
 },
 deleteBtn: {

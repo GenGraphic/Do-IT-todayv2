@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView} from 'react-native'
 import React, { useRef, useContext } from 'react';
 import Menu from '../components/Menu';
 import { LinearGradient } from 'expo-linear-gradient';

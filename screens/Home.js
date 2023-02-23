@@ -4,7 +4,6 @@ import GloballyConst from '../GloballyConst';
 import React, { useEffect, useState, useRef } from 'react';
 import  Menu  from '../components/Menu';
 import AddTask from '../components/AddTask';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //function to convert time to string
 const timeToString = (time) => {
