@@ -58,7 +58,7 @@ export const Menu = React.forwardRef((props, ref) => {
       ref={ref} 
       style={[styles.body, { transform: [{ translateX: position }] }]} 
       pointerEvents={isVisible ? 'auto' : 'none'}>
-        <BlurView blurRadius={40}>
+            <BlurView intensity={40}>
             <LinearGradient style={styles.menuWrapper} blurRadius={40} colors={['rgba(16, 0, 43, 0.7)', 'rgba(60,9,108,0.7), rgba(90,24,154,0.7),rgba(123,44,191,0.7)']}>
                 <View style={styles.topBar}>
                     <Text style={styles.sayHi}>Hi, {userName}</Text>
@@ -107,7 +107,7 @@ export const Menu = React.forwardRef((props, ref) => {
                   </TouchableOpacity>
                 </View>
             </LinearGradient>
-        </BlurView>
+            </BlurView>
     </Animated.View> 
   )
 });
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     menuOption: {
         flexDirection: 'row',
-        justifyContent: 'felx-start',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         marginTop: 50
     },

@@ -86,7 +86,8 @@ const styles = StyleSheet.create({
   },
   body: {
     flex:1,
-    padding: 10,
+    paddingLeft:10,
+    paddingRight: 10
   },
   sideMenu: {
     position: 'absolute',

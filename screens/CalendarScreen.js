@@ -62,6 +62,8 @@ const styles = StyleSheet.create({
   body: {
     backgroundColor: '#000814',
     flex: 1,
+    paddingLeft:10,
+    paddingRight:10
   },
   topBar: {
     flexDirection: 'row',
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     height:25
   },
   calendar: {
-    margin: 20,
+    marginTop: 10,
     borderRadius: 20
   }
   

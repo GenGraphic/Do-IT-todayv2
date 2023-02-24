@@ -74,11 +74,15 @@ export default NotesScreen
 const styles = StyleSheet.create({
   body: {
     flex:1,
-    padding: 10
+    paddingLeft: 10,
+    paddingRight: 10
   },
   iconLarge: {
     width: 25,
     height: 25
+  },
+  sideMenu: {
+    height: '100%'
   },
   topBar: {
     flexDirection: 'row',

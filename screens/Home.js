@@ -182,14 +182,6 @@ const styles = StyleSheet.create({
   whiteTxt: {
     color: '#FFF'
   },
-
-  sideMenu: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width:200,
-    height: '100%'
-  },
   body: {
     backgroundColor: '#000814',
     flex: 1,
