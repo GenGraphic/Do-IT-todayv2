@@ -1,21 +1,31 @@
-import React, { Component, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Text, View, StyleSheet, Image, TouchableOpacity, Platform, TextInput, Button, ScrollView,Keyboard } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import GloballyConst from '../GloballyConst';
+import NotesContext from '../NotesContext';
 
 
-export function AddTask () {
+//function to convert time to string
+const timeToString = (time) => {
+  const date = new Date(time);
+  return date.toISOString().split('T')[0];
+}
+
+const AddTask  = ({addTask, toggleThis}) => {
+  const { tasks } = useContext(NotesContext);
+
   const [date, setDate] = useState( new Date);
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
-  const [stepList, setStepList] = useState([]);
   const [temporaryStep ,setTemporaryStep] = useState('')
 
-  const [nameTxt, setNameTxt] = useState('');
-  const [dateTxt, setDateTxt] = useState('yyyy/mm/dd');
-  const [timeTxt, setTimeTxt] = useState('12:00');
+ 
+  const [titleTask, setTitleTask] = useState('');
+  const [dateTask, setDateTask] = useState(timeToString(date)); //default value is today date
+  const [timeTask, setTimeTask] = useState(date.getHours() + ':' + date.getMinutes());
+  const [stepList, setStepList] = useState([]);
 
+  //function  for datTime picker(better don't touch)
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
@@ -38,8 +48,8 @@ export function AddTask () {
     let fDate = tempDate.getFullYear() + '-' + monthTwoDigits + '-' + tempDate.getDate();
     let fTime = tempDate.getHours() + ' : ' + tempDate.getMinutes();
 
-    setDateTxt(fDate);
-    setTimeTxt(fTime);
+    setDateTask(fDate);
+    setTimeTask(fTime);
 
   }
   //this function takes input (time/date) and show the Time/Date picker screen
@@ -49,14 +59,11 @@ export function AddTask () {
   }
 
   //this push a new task on the Globally tasks file on btn press (Add Btn)
-  const PushToGloball = () => {
-    GloballyConst.tasks[dateTxt] = [{name: nameTxt, timeStart: timeTxt, date: dateTxt, stepsList: stepList}];
-    hideAddScreen();
-  }
- 
-  //function that change the value of boolean to hide the screen for adding tasks
-  const hideAddScreen = () => {
-    GloballyConst.ADDSCREEN_ON = false;
+  const handleAddTask = () => {
+    const id = Math.random() * 100000 //generate a random number to be used as id
+
+    addTask(id, titleTask, timeTask, dateTask, stepList); //this function is called in TasksContext
+    closeThis();
   }
 
   //first keybord is dissmissed
@@ -84,7 +91,10 @@ export function AddTask () {
     setStepList(itemsCopy);
   }
 
-  
+  //function to close this component
+  const closeThis = () => {
+    toggleThis(false);
+  }
     return (
       <View style={styles.body}>
         <View style={styles.topBar}>
@@ -106,7 +116,7 @@ export function AddTask () {
             <TextInput 
             style={styles.inputField}
             placeholder={'ex. Meeting'}
-            onChangeText={(text) => setNameTxt(text)}
+            onChangeText={(text) => setTitleTask(text)}
             />
           </View>
           <View style={styles.inputs}>
@@ -197,9 +207,9 @@ export function AddTask () {
         </View>
 
         <View style={styles.btnCont}>
-          <Button style={styles.cancelBtn} onPress={hideAddScreen} title='Cancel' color={'#fb5607'}>
+          <Button style={styles.cancelBtn} onPress={closeThis} title='Cancel' color={'#fb5607'}>
           </Button>
-          <Button  style={styles.doneBtn} title='Done' color={'#70e000'} onPress={PushToGloball}>
+          <Button  style={styles.doneBtn} title='Done' color={'#70e000'} onPress={handleAddTask}>
           </Button>
         </View>
 

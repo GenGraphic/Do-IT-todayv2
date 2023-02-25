@@ -19,7 +19,7 @@ const NotesScreen = () => {
 
   //function that makes a new random key, and use a function from NotesContext and adds it to the list
   const handleAddNote =() => {
-    const key = Math.random() * 100;
+    const key = Math.random() * 100000;
     addNewNote(key, '', '');
   }
   return (

@@ -3,7 +3,6 @@ import React, { createContext, useState } from "react";
 const NotesContext = createContext([]);
 
 //find a way to save this file in phone memory so that user have the file allways
-//make a Context for tasks too
 
 export function NotesProvider({ children }) {
     const [notes, setNotes] = useState([])
