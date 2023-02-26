@@ -60,9 +60,9 @@ const AddTask  = ({addTask, toggleThis}) => {
 
   //this push a new task on the Globally tasks file on btn press (Add Btn)
   const handleAddTask = () => {
-    const id = Math.random() * 100000 //generate a random number to be used as id
+    const key = Math.random() * 100000 //generate a random number to be used as id
 
-    addTask(id, titleTask, timeTask, dateTask, stepList); //this function is called in TasksContext
+    addTask(key, titleTask, timeTask, dateTask, stepList); //this function is called in TasksContext
     closeThis();
   }
 

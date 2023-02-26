@@ -3,9 +3,9 @@ import React, { useContext, useState} from 'react';
 import TasksContext from '../TasksContext';
 
 
-const Task = ({id, title, time, date, steps, removeTask, reloadList}) => {
+const Task = ({taskKey, title, time, date, steps}) => {
 
-
+    const { removeTask } = useContext(TasksContext);
     const { tasks, setTasks } = useContext(TasksContext);
     const [stepsList ,setStepsList] = useState(steps)
 
@@ -18,8 +18,7 @@ const Task = ({id, title, time, date, steps, removeTask, reloadList}) => {
               style: 'cancel',
             },
             {text: 'Yes', onPress: () => {
-                removeTask(date, id)
-                reloadList();
+                removeTask(date, taskKey)
             }},
           ]);
     }
@@ -27,7 +26,7 @@ const Task = ({id, title, time, date, steps, removeTask, reloadList}) => {
         const newArray = tasks;
         setStepsList(stepsList.filter(elm => elm !== step));
         
-        newArray[date].find(obj => obj.id === id)['steps'] = stepsList;
+        newArray[date].find(obj => obj.key === taskKey)['steps'] = stepsList;
 
         setTasks(newArray);
     }
@@ -63,7 +62,7 @@ const Task = ({id, title, time, date, steps, removeTask, reloadList}) => {
     
             <View style={{flexDirection:'row', alignItems: 'center'}}>
                 <Image style={styles.iconSmall}  source={require('../assets/iconsHome/clock.png')}/>
-                <Text style={{color:'rgba(255,255,255,0.5)', padding:5}}>{id}</Text>
+                <Text style={{color:'rgba(255,255,255,0.5)', padding:5}}>{taskKey}</Text>
             </View>
         </TouchableOpacity>
     );

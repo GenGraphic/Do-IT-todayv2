@@ -1,15 +1,34 @@
-import { StyleSheet, Text, View, TouchableOpacity, Image, ImageBackground } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, Image, Alert } from 'react-native'
 import React, {useRef, useState} from 'react';
 import Menu from '../components/Menu';
 import { LinearGradient } from 'expo-linear-gradient';
 import ProfilePicture from 'react-native-profile-picture';
+import { authentication } from '../firebase';
+import { useNavigation } from '@react-navigation/core';
+
 
 
 const Profile = () => {
   const sideMenu = useRef(null);//ref to the menu forwordRef()
   const [name, setName] = useState('Eduard Deleu')
+  const navigation = useNavigation();
 
 
+  const handleDeletAccount = () =>
+    Alert.alert('Warning', 'Are you sure you want to delete your account?', [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => {
+        let user = authentication.currentUser
+        user
+          .delete()
+          .then(() => navigation.navigate('Login'))
+          .catch((e) => alert(e))
+      }},
+    ]);
 
   //get the function from the Menu Component and close it
   const openMenu = () => {
@@ -63,7 +82,7 @@ const Profile = () => {
               <Text style={{color:'#FFF', fontSize: 15}}>Change Password</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.deletBtn}>
+          <TouchableOpacity style={styles.deletBtn} onPress={handleDeletAccount}>
             <Text style={{color:'#FFF', fontSize: 15}}>Delete account</Text>
           </TouchableOpacity>
         </View>

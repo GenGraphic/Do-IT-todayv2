@@ -12,15 +12,19 @@ import AddTask from '../components/AddTask';
 
 const Home = () => {
   const sideMenu = useRef(null);//ref to the menu forwordRef()
-  const { tasks, setTasks } = useContext(TasksContext);
+  const { tasks } = useContext(TasksContext);
+
+  const [tasksList, setTasksList] = useState({});
 
 
   const { addNewTask } = useContext(TasksContext);
-  const { removeTask } = useContext(TasksContext);
+  
   const [ toggleNewTaskComp, settoggleNewTaskComp ] = useState(false);
   
 
   const loadItems = (day) => {
+
+    setTasksList(tasks)
 
     setTimeout(() => {
 
@@ -28,32 +32,22 @@ const Home = () => {
         const time = day.timestamp + i * 24 * 60 * 60 * 1000;
         const strTime = timeToString(time);
 
+        //check if tasks has strTime and if not creates an empy araay ex '2023-02-26' have strtime, if not add []
         if (!tasks[strTime]) {
           tasks[strTime] = [];
-          
-          const numItems = tasks.length;
-          for (let j = 0; j < numItems; j++) {
-            tasks[strTime].push({
-              name: 'Item for ' + strTime + ' #' + j,
-              height: Math.max(50, Math.floor(Math.random() * 150)),
-              day: strTime
-            });
-          }
         }
       }
-      
+      const SetNewItems = () => {  
+        const newTasks = {};
+        
+        Object.keys(tasks).forEach(key => {
+          newTasks[key] = tasks[key];
+        });
+        setTasksList(newTasks);
+      }
       SetNewItems();
     }, 1000);
   }
-
-  const SetNewItems = () => {
-    const newTasks = {};
-    Object.keys(tasks).forEach(key => {
-      newTasks[key] = tasks[key];
-    });
-    setTasks(newTasks);
-  }
-
   //function to convert time to string
   const timeToString = (time) => {
     const date = new Date(time);
@@ -69,17 +63,16 @@ const Home = () => {
     settoggleNewTaskComp(true);
   }
 
-  //i belive when i delete one task the render item asign props other data
+  //BIG BUG
+  //when on the same day exist 3 items, and the second is beeing removed, the third dissapears
   const renderItem = (task) => {
     return (
       <Task 
-        id={task.id}
+        taskKey={task.key}
         title={task.title} 
         time={task.time} 
         date={task.date} 
         steps={task.steps}
-        removeTask={removeTask}
-        reloadList={SetNewItems}
         >
       </Task>
     )
@@ -109,6 +102,7 @@ const Home = () => {
         selected={new Date}
         renderItem={renderItem}
         showClosingKnob={true}
+        refreshing={true}
       >
       </Agenda>
 
