@@ -7,29 +7,53 @@ const Task = ({taskKey, title, time, date, steps}) => {
 
     const { removeTask } = useContext(TasksContext);
     const { tasks, setTasks } = useContext(TasksContext);
-    const [stepsList ,setStepsList] = useState(steps)
+    const [stepsList ,setStepsList] = useState(steps);
+    const[progressWidth, setProgressWidth] = useState('0%');
+    const [initialLength, setInitialLength] = useState(stepsList.length);
 
-    
+    //this function handle removing a task on long press
+    //throw Alert to make sure that user want to remove the task
     const handleRemoveTask = () => {
         Alert.alert('Alert Title', 'Do you want to remove this task?' + date + ' ' + time, [
             {
               text: 'No',
-              onPress: () => console.log('Cancel Pressed'),
+              onPress: () => console.log('Cancel Pressed'), //if NO is pressed, nothing happens
               style: 'cancel',
             },
             {text: 'Yes', onPress: () => {
-                removeTask(date, taskKey)
+                removeTask(date, taskKey) //if YES is pressed, camm removeTask from TasksContext
             }},
           ]);
     }
-    const removeStep = (step) => {
-        const newArray = tasks;
-        setStepsList(stepsList.filter(elm => elm !== step));
-        
-        newArray[date].find(obj => obj.key === taskKey)['steps'] = stepsList;
 
-        setTasks(newArray);
+    //removing step from task
+    const removeStep = (step) => {
+        const newArray = tasks; //makes a new Array
+        setStepsList(stepsList.filter(elm => elm !== step)); //set the steps list the list that is beeing filterd so the step pressed id removed
+        
+        newArray[date].find(obj => obj.key === taskKey)['steps'] = stepsList; //find the task with date of this task and search for steps argument
+                                                                              //give this list the new stepsList
+
+        setTasks(newArray); //set the task the new modified list
+        handleProgress(); //call the fuinction to incresse the progress bar
+
+        if(stepsList.length === 1) {
+            removeTask(date, taskKey);
+        }
     }
+
+    const handleProgress = () => {
+        const newArray = Array(initialLength).fill(0); //create a copy of the array that is not taking changes if the original array changes
+
+        const stepWorth = 100 / newArray.length; //see how much proccest is a step taking
+
+        const formatedWidth = parseFloat(progressWidth.replace('%','')); //had to format the progrees from '0%' to '0'
+
+        setProgressWidth(formatedWidth + stepWorth + '%') //set the progress with the formated width + what the removed step worth
+    }
+    
+
+    
 
     return (
         <TouchableOpacity style={styles.taskCont} onLongPress={handleRemoveTask}>
@@ -40,11 +64,11 @@ const Task = ({taskKey, title, time, date, steps}) => {
   
             <View style={styles.statusBar}>
                 <View style={styles.procents}>
-                    <Text style={{color:'#FFF'}}>0%</Text>
+                    <Text style={{color:'#FFF'}}>{parseInt(progressWidth) + '%'}</Text>
                     <Text style={{color:'#FFF'}}>100%</Text>
                 </View>
                     <View style={styles.bar}>
-                    <View style={styles.progress}></View>
+                    <View style={[styles.progress, {width: progressWidth }]}></View>
                 </View>
             </View>
             
@@ -62,7 +86,7 @@ const Task = ({taskKey, title, time, date, steps}) => {
     
             <View style={{flexDirection:'row', alignItems: 'center'}}>
                 <Image style={styles.iconSmall}  source={require('../assets/iconsHome/clock.png')}/>
-                <Text style={{color:'rgba(255,255,255,0.5)', padding:5}}>{taskKey}</Text>
+                <Text style={{color:'rgba(255,255,255,0.5)', padding:5}}>{time}</Text>
             </View>
         </TouchableOpacity>
     );
@@ -105,7 +129,6 @@ const styles = StyleSheet.create({
     },
     progress: {
         height: "100%",
-        width: '50%',
         backgroundColor: '#0CC941',
         borderRadius: 10
     },

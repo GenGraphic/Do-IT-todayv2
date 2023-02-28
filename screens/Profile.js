@@ -5,12 +5,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import ProfilePicture from 'react-native-profile-picture';
 import { authentication } from '../firebase';
 import { useNavigation } from '@react-navigation/core';
+import { TextInput } from 'react-native-gesture-handler';
+import { updateEmail, updatePassword } from 'firebase/auth';
 
 
 
 const Profile = () => {
+  let user = authentication.currentUser;
   const sideMenu = useRef(null);//ref to the menu forwordRef()
-  const [name, setName] = useState('Eduard Deleu')
+  const [name, setName] = useState('John Smith');
+  const [email, setEmail] = useState(user.email);
+  const [toggleChangeScreen, setToggleChangeScreen] = useState(true)
   const navigation = useNavigation();
 
 
@@ -22,7 +27,6 @@ const Profile = () => {
         style: 'cancel',
       },
       {text: 'OK', onPress: () => {
-        let user = authentication.currentUser
         user
           .delete()
           .then(() => navigation.navigate('Login'))
@@ -34,6 +38,81 @@ const Profile = () => {
   const openMenu = () => {
     sideMenu.current.slideToRight();
   }
+
+  //change user Email
+  const handleChangeEmail = () => {
+    Alert.prompt(
+      "Change your Email",
+      "Enter your new E-mail Adress.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: email => {
+            updateEmail(authentication.currentUser, email).then(() => {
+              navigation.navigate('Login');
+            }).catch((error) => {
+              alert(error);
+            })
+          }
+        }
+      ],
+    );
+  };
+  //change user pass
+  const handleChangePass = () => {
+    Alert.prompt(
+      "Change your Password",
+      "Enter your new Password.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: password => {
+            updatePassword(user, password).then(() => {
+              navigation.navigate('Login');
+            }).catch((error) => {
+              alert(error);
+            })
+          }
+        }
+      ],
+      'secure-text'
+    );
+  };
+
+  //change user name
+  const handleChangeName = () => {
+    Alert.prompt(
+      "Change user name.",
+      "Enter your new user Name.",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: userName => {
+            setName(userName)
+          }
+        }
+      ],
+      'plain-text'
+    );
+  }
+  
+
+
   return (
     <LinearGradient 
       colors={['#10002B', '#3C096C', '#5A189A', '#7B2CBF']}
@@ -56,7 +135,7 @@ const Profile = () => {
           />
         </View>
         <View style={styles.welcomeTxt}>
-          <Text style={{color:'#FFF', fontSize: 16}}>Hi, Eduard</Text>
+          <Text style={{color:'#FFF', fontSize: 16}}>Hi, {name}</Text>
           <Text style={{color:'#FFF', fontSize: 18, fontWeight:'bold'}}>This is you.</Text>
         </View>
 
@@ -69,16 +148,16 @@ const Profile = () => {
             height={100}
           />
 
-          <Text style={{color:'#FFF', fontSize:20, fontWeight:'bold'}}>{name}</Text>
-          <Text style={{color:'#FFF', fontSize:14}}>deleucostel32@gmail.com</Text>
+          <Text style={{color:'#FFF', fontSize:20, fontWeight:'bold'}} onPress={handleChangeName}>{name}</Text>
+          <Text style={{color:'#FFF', fontSize:14}}>{email}</Text>
         </View>
 
         <View style={styles.btnCont}>
           <View style={styles.changeBtnCont}>
-            <TouchableOpacity style={styles.changeBtn}>
+            <TouchableOpacity style={styles.changeBtn} onPress={handleChangeEmail}>
               <Text style={{color:'#FFF', fontSize: 15}}>Change E-mail</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.changeBtn}>
+            <TouchableOpacity style={styles.changeBtn} onPress={handleChangePass}>
               <Text style={{color:'#FFF', fontSize: 15}}>Change Password</Text>
             </TouchableOpacity>
           </View>
@@ -163,5 +242,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     margin: 10
-  }
+  },
 })

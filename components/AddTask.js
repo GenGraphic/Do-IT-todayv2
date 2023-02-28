@@ -74,10 +74,12 @@ const AddTask  = ({addTask, toggleThis}) => {
   const AddStepToList = () => {
     Keyboard.dismiss();
 
-    if(temporaryStep <= 0) {
+    if(temporaryStep <= 0) { //if field is empty
       alert('Empty step is not valid.')
-    }else {
-      setStepList([...stepList, temporaryStep])
+    }else if (stepList.includes(temporaryStep)) { //if user try to add a step that the list allready has
+      alert('You allready have this step.')
+    }else { 
+      setStepList([...stepList, temporaryStep]) //if all OK add to list
     }
     setTemporaryStep(null);
   }

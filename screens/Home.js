@@ -59,6 +59,7 @@ const Home = () => {
     sideMenu.current.slideToRight();
   }
 
+  //open the window that let's user to add new task
   const handleAddTaskComp = () => {
     settoggleNewTaskComp(true);
   }
