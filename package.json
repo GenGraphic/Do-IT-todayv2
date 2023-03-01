@@ -30,6 +30,7 @@
     "react-native": "0.70.5",
     "react-native-blur": "^3.2.2",
     "react-native-calendars": "^1.1293.0",
+    "react-native-dialog": "^9.3.0",
     "react-native-gesture-handler": "~2.8.0",
     "react-native-profile-picture": "^1.0.0",
     "react-native-prompt-android": "^1.1.0",

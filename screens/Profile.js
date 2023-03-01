@@ -4,8 +4,9 @@ import Menu from '../components/Menu';
 import { LinearGradient } from 'expo-linear-gradient';
 import { authentication } from '../firebase';
 import { useNavigation } from '@react-navigation/core';
-import { updateEmail, updatePassword, updateProfile } from 'firebase/auth';
+import { sendPasswordResetEmail, updateProfile } from 'firebase/auth';
 import * as ImagePicker from 'expo-image-picker';
+import Dialog from "react-native-dialog";
 
 
 
@@ -16,6 +17,9 @@ const Profile = () => {
   const [email, setEmail] = useState(user.email);
   const navigation = useNavigation();
   const [profileImage, setProfileImage] = useState(user.photoURL);
+
+  const [changedName, setChangedName] = useState();
+  const [toggleDialog, setToggleDialog] = useState(false);
 
 
   const handleDeletAccount = () =>
@@ -38,79 +42,23 @@ const Profile = () => {
     sideMenu.current.slideToRight();
   }
 
-  //change user Email
-  const handleChangeEmail = () => {
-    Alert.prompt(
-      "Change your Email",
-      "Enter your new E-mail Adress.",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        {
-          text: "OK",
-          onPress: email => {
-            updateEmail(user, email).then(() => {
-              navigation.navigate('Login');
-            }).catch((error) => {
-              alert(error);
-            })
-          }
-        }
-      ],
-    );
-  };
   //change user pass
   const handleChangePass = () => {
-    Alert.prompt(
-      "Change your Password",
-      "Enter your new Password.",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        {
-          text: "OK",
-          onPress: password => {
-            updatePassword(user, password).then(() => {
-              navigation.navigate('Login');
-            }).catch((error) => {
-              alert(error);
-            })
-          }
-        }
-      ],
-      'secure-text'
-    );
+    sendPasswordResetEmail(authentication, email)
+      .then(alert('We have sent you an reset Password Email'))
+      .catch((error => alert(error)))
   };
 
   //change user name
   const handleChangeName = () => {
-    Alert.prompt(
-      "Change user name.",
-      "Enter your new user Name.",
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        {
-          text: "OK",
-          onPress: userName => {
-            updateProfile(user, {
-              displayName: userName
-            })
-            setName(userName)
-          }
-        }
-      ],
-      'plain-text'
-    );
+    updateProfile(user, {
+      displayName: changedName
+    }).then(() => {
+      setToggleDialog(false)
+      setName(user.displayName)
+    }).catch((error) => {
+      alert(error)
+    })
   }
   
   //change profile Image
@@ -123,11 +71,9 @@ const Profile = () => {
       updateProfile(authentication.currentUser, {
         photoURL: result.assets[0].uri
       })
+      setProfileImage(user.photoURL);
     }
   }
-
-  //
-
 
   return (
     <LinearGradient 
@@ -161,23 +107,25 @@ const Profile = () => {
             <Image source={{uri: profileImage}} style={styles.profileFoto}/>
           </TouchableOpacity>
 
-          <Text style={{color:'#FFF', fontSize:20, fontWeight:'bold'}} onPress={handleChangeName}>{name}</Text>
+          <Text style={{color:'#FFF', fontSize:20, fontWeight:'bold'}} onPress={() => setToggleDialog(true)}>{name}</Text>
           <Text style={{color:'#FFF', fontSize:14}}>{email}</Text>
         </View>
 
         <View style={styles.btnCont}>
-          <View style={styles.changeBtnCont}>
-            <TouchableOpacity style={styles.changeBtn} onPress={handleChangeEmail}>
-              <Text style={{color:'#FFF', fontSize: 15}}>Change E-mail</Text>
+            <TouchableOpacity style={styles.deletBtn} onPress={handleDeletAccount}>
+              <Text style={{color:'#FFF', fontSize: 15}}>Delete account</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.changeBtn} onPress={handleChangePass}>
               <Text style={{color:'#FFF', fontSize: 15}}>Change Password</Text>
             </TouchableOpacity>
-          </View>
-          <TouchableOpacity style={styles.deletBtn} onPress={handleDeletAccount}>
-            <Text style={{color:'#FFF', fontSize: 15}}>Delete account</Text>
-          </TouchableOpacity>
         </View>
+
+        <Dialog.Container visible={toggleDialog}>
+          <Dialog.Title>Change name</Dialog.Title>
+          <Dialog.Input placeholder='Name' onChangeText={(text) => setChangedName(text)}></Dialog.Input>
+          <Dialog.Button label="Cancel"/>
+          <Dialog.Button label="Confirm" onPress={() => handleChangeName()}/>
+        </Dialog.Container>
     </LinearGradient>
   )
 }
@@ -234,15 +182,10 @@ const styles = StyleSheet.create({
   },
   btnCont: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'flex-end',
-    paddingBottom: 50
-  },
-  changeBtnCont: {
-    width: '100%',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    padding: 20
+    alignItems: 'flex-end',
+    paddingBottom: 50,
   },
   changeBtn: {
     width: 150,
@@ -259,7 +202,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
-    margin: 10
+   
+   
   },
 })
